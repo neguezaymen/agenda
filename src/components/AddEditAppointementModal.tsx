@@ -7,13 +7,12 @@ import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
-import styles from "./AppointementsGrid.module.scss";
+import styles from "./MainSection.module.scss";
 import {
   FormControl,
   InputLabel,
   MenuItem,
   Select,
-  SelectChangeEvent,
   TextField,
 } from "@mui/material";
 import { TimeSlots } from "../utils/TimeSlots";

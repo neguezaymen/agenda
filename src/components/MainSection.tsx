@@ -1,7 +1,6 @@
 import React from "react";
-import styles from "./AppointementsGrid.module.scss";
+import styles from "./MainSection.module.scss";
 import AddAppointementModal from "./AddEditAppointementModal";
-import { TimeSlots } from "../utils/TimeSlots";
 import { Button } from "@mui/material";
 import { useAppDispatch } from "../store/hooks";
 import { showModal } from "../slices/UiSlice";
@@ -9,7 +8,7 @@ import DeleteAppointementModal from "./DeleteAppointementModal";
 import CurrentTimeBar from "./CurrentTimeBar";
 import { AppointementsWrapper } from "./AppointementsWrapper";
 
-const AppointementsGrid = () => {
+const MainSection = () => {
   const dispatch = useAppDispatch();
 
   return (
@@ -37,4 +36,4 @@ const AppointementsGrid = () => {
   );
 };
 
-export default AppointementsGrid;
+export default MainSection;

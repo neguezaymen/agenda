@@ -1,6 +1,6 @@
 import Navbar from "./components/Navbar";
 import styles from "./App.module.scss";
-import AppointementsGrid from "./components/AppointementsGrid";
+import AppointementsGrid from "./components/MainSection";
 import { useState } from "react";
 import { CurrentDateContext } from "./contexts/CurrentDateContext";
 

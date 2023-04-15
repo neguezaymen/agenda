@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { AppointementState } from "../slices/appointementSlice";
 import { GetHoursAndMinutesFromTime } from "../utils/DateFormat";
 import { isSameDay } from "date-fns";
-import { setModalId, showModal } from "../slices/UiSlice";
+import { setModalId, showDeleteModal, showModal } from "../slices/UiSlice";
 
 export const AppointementsWrapper = () => {
   return (
@@ -66,14 +66,34 @@ const Appointement = (props: AppointementState) => {
         void dispatch(showModal());
       }}
     >
-      <p>
-        <span>Vendor:</span>
-        {props.vendor}
-      </p>
-      <p>
-        <span>Buyer:</span>
-        {`${props.buyer}, ${props.company}`}
-      </p>
+      <div>
+        <p>
+          <span>Vendor:</span>
+          {props.vendor}
+        </p>
+        <p>
+          <span>Buyer:</span>
+          {`${props.buyer}, ${props.company}`}
+        </p>
+      </div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        className={styles.deleteIcon}
+        onClick={(event) => {
+          event.stopPropagation();
+          void dispatch(setModalId(props.id));
+          void dispatch(showDeleteModal());
+        }}
+      >
+        <path fill="none" d="M0 0h24v24H0V0z"></path>
+        <path
+          fill="red"
+          d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1zM18 7H6v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7z"
+        ></path>
+      </svg>
     </div>
   );
 };

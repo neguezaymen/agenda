@@ -1,11 +1,10 @@
-
-.line{
-    display: flex;
-    align-items: center;
-    position: absolute;
-    width: 96%;
-    left: 2%;
-    transform: translateY(-50%)
+.line {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  width: 96%;
+  left: 2%;
+  transform: translateY(-50%);
 }
 .appointement {
   position: absolute;
@@ -15,15 +14,24 @@
   padding: 10px;
   max-width: 255px;
   width: 100%;
-  p{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  &:hover .deleteIcon {
+    display: block;
+  }
+  .deleteIcon {
+    display: none;
+  }
+  p {
     display: flex;
-    flex-wrap: wrap
+    flex-wrap: wrap;
   }
   cursor: pointer;
-  &:hover{
-    background-color: rgba(24, 116, 209, 0.8);;
+  &:hover {
+    background-color: rgba(24, 116, 209, 0.8);
   }
-  span{
+  span {
     font-size: 18px;
     font-weight: 500;
     margin-right: 10px;
