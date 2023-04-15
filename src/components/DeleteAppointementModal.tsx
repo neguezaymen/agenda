@@ -70,6 +70,8 @@ const DeleteAppointementModal = () => {
       </DialogContent>
       <DialogActions>
         <Button
+          variant="outlined"
+          color="error"
           onClick={() => {
             modalId && void dispatch(deleteAppointement(modalId));
             void dispatch(setModalId(null));

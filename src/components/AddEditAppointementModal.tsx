@@ -163,7 +163,8 @@ export default function AddEditAppointementModal() {
                     type="text"
                     name="vendor"
                     fullWidth
-                    variant="standard"
+                    variant="outlined"
+                    color="primary"
                   />
                 )}
               />
@@ -187,7 +188,8 @@ export default function AddEditAppointementModal() {
                     label="Buyer"
                     type="text"
                     fullWidth
-                    variant="standard"
+                    variant="outlined"
+                    color="primary"
                   />
                 )}
               />
@@ -211,7 +213,8 @@ export default function AddEditAppointementModal() {
                     label="Company"
                     type="text"
                     fullWidth
-                    variant="standard"
+                    variant="outlined"
+                    color="primary"
                   />
                 )}
               />
@@ -247,6 +250,8 @@ export default function AddEditAppointementModal() {
                       }
                       style={{ minWidth: "100px" }}
                       required
+                      variant="outlined"
+                      color="primary"
                     >
                       <MenuItem value={15}>15min</MenuItem>
                       <MenuItem value={30}>30min</MenuItem>
@@ -276,7 +281,7 @@ export default function AddEditAppointementModal() {
             </Typography>
           </DialogContent>
           <DialogActions>
-            <Button autoFocus type="submit">
+            <Button autoFocus type="submit" variant="outlined" color="success">
               {modalId ? "Save Changes" : "Create"}
             </Button>
           </DialogActions>

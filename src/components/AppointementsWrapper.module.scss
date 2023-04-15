@@ -12,8 +12,7 @@
   border-radius: 10px;
   left: 67px;
   padding: 10px;
-  max-width: 255px;
-  width: 100%;
+  width: calc(100% - 90px);
   display: flex;
   align-items: center;
   justify-content: space-between;

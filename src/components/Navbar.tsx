@@ -9,7 +9,6 @@ import { CurrentDateContext } from "../contexts/CurrentDateContext";
 
 const Navbar = () => {
   const { currentDate, setCurrentDate } = useContext(CurrentDateContext);
-
   return (
     <div className={styles.navbarContainer}>
       <div className={styles.currentDay}>
@@ -17,7 +16,6 @@ const Navbar = () => {
       </div>
       <div className={styles.today}>
         <img src="/logo.webp" alt="logo" className={styles.logo} />
-        <div className={styles.logoText}>ModaResa Agenda</div>
       </div>
       <div className={styles.datePicker}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
