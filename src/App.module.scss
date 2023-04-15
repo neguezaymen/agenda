@@ -1,0 +1,23 @@
+@mixin sm {
+   @media (max-width: 768px) {
+     @content
+   }
+ }
+
+.container {
+   @include sm {
+      padding: 0;
+    }
+   display: flex;
+   justify-content: center;
+   flex-direction: column;
+   padding: 20px;
+   align-items: center;
+   width: 100%;
+   max-width: 840px;
+   margin: 10vh auto;
+   border-radius: 20px;
+   min-height: 100vh;
+   background-color: #ECF5FA;
+   font-family: 'Roboto';
+}
