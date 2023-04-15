@@ -7,7 +7,9 @@ import { AppointementState } from "../slices/appointementSlice";
 import { GetHoursAndMinutesFromTime } from "../utils/DateFormat";
 import { isSameDay } from "date-fns";
 import { setModalId, showDeleteModal, showModal } from "../slices/UiSlice";
+import CurrentTimeBar from "./CurrentTimeBar";
 
+export const OneMinuteToPixels = 4;
 export const AppointementsWrapper = () => {
   return (
     <div style={{ height: "2160px", position: "relative" }}>
@@ -15,6 +17,7 @@ export const AppointementsWrapper = () => {
         <Line slot={slot} key={slot} index={index} />
       ))}
       <Appointements />
+      <CurrentTimeBar />
     </div>
   );
 };
@@ -50,9 +53,9 @@ const Appointements = () => {
 };
 
 const Appointement = (props: AppointementState) => {
-  const height = props.duration * 4;
+  const height = props.duration * OneMinuteToPixels;
   const { hours, minutes } = GetHoursAndMinutesFromTime(props.time);
-  const top = ((hours - 9) * 60 + minutes) * 4;
+  const top = ((hours - 9) * 60 + minutes) * OneMinuteToPixels;
   const dispatch = useAppDispatch();
   return (
     <div

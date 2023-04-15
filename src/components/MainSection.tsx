@@ -5,7 +5,6 @@ import { Button } from "@mui/material";
 import { useAppDispatch } from "../store/hooks";
 import { showModal } from "../slices/UiSlice";
 import DeleteAppointementModal from "./DeleteAppointementModal";
-import CurrentTimeBar from "./CurrentTimeBar";
 import { AppointementsWrapper } from "./AppointementsWrapper";
 
 const MainSection = () => {
@@ -15,7 +14,6 @@ const MainSection = () => {
     <div className={styles.gridContainer}>
       <AddAppointementModal />
       <DeleteAppointementModal />
-      <CurrentTimeBar />
       <AppointementsWrapper />
       <Button
         className={styles.addIcon}

@@ -1,8 +1,10 @@
 import React from "react";
+import { OneMinuteToPixels } from "./AppointementsWrapper";
 
 const CurrentTimeBar = () => {
   const date = new Date();
-  const position = (date.getHours() - 9) * 380 + date.getMinutes() * 6.33 + 23;
+  const position =
+    (date.getHours() - 9) * 240 + date.getMinutes() * OneMinuteToPixels;
   return date.getHours() >= 9 && date.getHours() <= 18 ? (
     <div
       style={{
@@ -12,6 +14,7 @@ const CurrentTimeBar = () => {
         position: "absolute",
         top: position,
         left: 0,
+        transform: `translateY(-50%)`,
       }}
     >
       <div
