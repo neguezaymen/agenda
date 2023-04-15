@@ -65,23 +65,21 @@ export default function AddEditAppointementModal() {
   const { isModalVisible, modalId } = useAppSelector((state) => state.uiSlice);
   const appointements = useAppSelector((state) => state.appointements);
   const appointementToEdit = appointements.find((el) => el.id === modalId);
-  const [duration, setDuration] = React.useState<string>("15");
-  const [time, setTime] = React.useState<string>("09:00");
   const { currentDate } = React.useContext(CurrentDateContext);
   const {
     handleSubmit,
     control,
     clearErrors,
     reset,
+    watch,
     formState: { errors },
   } = useForm<Inputs>();
   const dispatch = useAppDispatch();
   const appointement = GetAppointementDate(
     new Date(currentDate),
-    GetHoursAndMinutesFromTime(time),
-    Number(duration)
+    GetHoursAndMinutesFromTime(watch("time")),
+    Number(watch("duration"))
   );
-
   const handleClose = () => {
     void dispatch(hideModal());
     void dispatch(setModalId(null));
@@ -93,13 +91,13 @@ export default function AddEditAppointementModal() {
       modalId &&
         void dispatch(
           editAppointement({
-            duration: Number(duration),
+            duration: Number(data.duration),
             date: appointement.startDate,
             id: modalId,
             buyer: data.buyer,
             company: data.company,
             vendor: data.vendor,
-            time: time,
+            time: data.time,
           })
         );
 
@@ -108,13 +106,13 @@ export default function AddEditAppointementModal() {
     const handleAdd = () => {
       void dispatch(
         addAppointement({
-          duration: Number(duration),
+          duration: Number(data.duration),
           date: appointement.startDate,
           id: Date.now(),
           buyer: data.buyer,
           company: data.company,
           vendor: data.vendor,
-          time: time,
+          time: data.time,
         })
       );
     };
@@ -244,7 +242,6 @@ export default function AddEditAppointementModal() {
                     <Select
                       {...rest}
                       label="Duration"
-                      onChange={(event) => setDuration(event.target.value)}
                       defaultValue={
                         appointementToEdit?.duration?.toString() ?? "15"
                       }
@@ -266,12 +263,7 @@ export default function AddEditAppointementModal() {
                 render={({ field: { ref, ...rest } }) => (
                   <FormControl style={{ marginTop: "20px", width: "50%" }}>
                     <InputLabel>Time</InputLabel>
-                    <Select
-                      {...rest}
-                      label="Time"
-                      required
-                      onChange={(event) => setTime(event.target.value)}
-                    >
+                    <Select {...rest} label="Time" required>
                       {TimeSlots.map((timeslot) => (
                         <MenuItem value={timeslot} key={timeslot}>
                           {timeslot}
