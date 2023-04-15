@@ -8,6 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
 import styles from "./MainSection.module.scss";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import {
   FormControl,
   InputLabel,
@@ -29,7 +30,13 @@ export interface DialogTitleProps {
   children?: React.ReactNode;
   onClose: () => void;
 }
-
+type Inputs = {
+  vendor: string;
+  buyer: string;
+  company: string;
+  duration: string;
+  time: string;
+};
 function BootstrapDialogTitle(props: DialogTitleProps) {
   const { children, onClose, ...other } = props;
 
@@ -58,12 +65,16 @@ export default function AddEditAppointementModal() {
   const { isModalVisible, modalId } = useAppSelector((state) => state.uiSlice);
   const appointements = useAppSelector((state) => state.appointements);
   const appointementToEdit = appointements.find((el) => el.id === modalId);
-  const [vendor, setVendor] = React.useState<string>();
-  const [buyer, setBuyer] = React.useState<string>();
-  const [company, setCompany] = React.useState<string>();
   const [duration, setDuration] = React.useState<string>("15");
   const [time, setTime] = React.useState<string>("09:00");
   const { currentDate } = React.useContext(CurrentDateContext);
+  const {
+    handleSubmit,
+    control,
+    clearErrors,
+    reset,
+    formState: { errors },
+  } = useForm<Inputs>();
   const dispatch = useAppDispatch();
   const appointement = GetAppointementDate(
     new Date(currentDate),
@@ -74,41 +85,59 @@ export default function AddEditAppointementModal() {
   const handleClose = () => {
     void dispatch(hideModal());
     void dispatch(setModalId(null));
+    clearErrors();
   };
 
-  const handleEdit = () => {
-    modalId &&
-      void dispatch(
-        editAppointement({
-          duration: Number(duration),
-          date: appointement.startDate,
-          id: modalId,
-          buyer: buyer,
-          company: company,
-          vendor: vendor,
-          time: time,
-        })
-      );
-
-    void dispatch(setModalId(null));
-  };
-  const handleSubmit = () => {
-    modalId
-      ? handleEdit()
-      : void dispatch(
-          addAppointement({
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    const handleEdit = () => {
+      modalId &&
+        void dispatch(
+          editAppointement({
             duration: Number(duration),
             date: appointement.startDate,
-            id: Date.now(),
-            buyer: buyer,
-            company: company,
-            vendor: vendor,
+            id: modalId,
+            buyer: data.buyer,
+            company: data.company,
+            vendor: data.vendor,
             time: time,
           })
         );
+
+      void dispatch(setModalId(null));
+    };
+    const handleAdd = () => {
+      void dispatch(
+        addAppointement({
+          duration: Number(duration),
+          date: appointement.startDate,
+          id: Date.now(),
+          buyer: data.buyer,
+          company: data.company,
+          vendor: data.vendor,
+          time: time,
+        })
+      );
+    };
+    modalId ? handleEdit() : handleAdd();
+    reset();
     handleClose();
   };
-
+  React.useEffect(() => {
+    reset({
+      buyer: appointementToEdit?.buyer ?? "",
+      company: appointementToEdit?.company ?? "",
+      vendor: appointementToEdit?.vendor ?? "",
+      duration: appointementToEdit?.duration.toString() ?? "15",
+      time: appointementToEdit?.time ?? "09:00",
+    });
+  }, [
+    appointementToEdit?.buyer,
+    appointementToEdit?.company,
+    appointementToEdit?.duration,
+    appointementToEdit?.time,
+    appointementToEdit?.vendor,
+    reset,
+  ]);
   return (
     <div className={styles.addModalContainer}>
       <Dialog
@@ -119,87 +148,147 @@ export default function AddEditAppointementModal() {
         <BootstrapDialogTitle onClose={handleClose}>
           {modalId ? "Edit the appointment" : "Create an appointment"}
         </BootstrapDialogTitle>
-        <DialogContent dividers>
-          <Typography gutterBottom>
-            <TextField
-              margin="dense"
-              id="vendor"
-              label="Vendor"
-              type="text"
-              fullWidth
-              defaultValue={appointementToEdit?.vendor ?? ""}
-              variant="standard"
-              onChange={(event) => {
-                setVendor(event.target.value);
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <DialogContent dividers>
+            <>
+              <Controller
+                name="vendor"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { ref, ...rest } }) => (
+                  <TextField
+                    {...rest}
+                    margin="dense"
+                    defaultValue={appointementToEdit?.vendor ?? ""}
+                    id="vendor"
+                    label="Vendor"
+                    type="text"
+                    name="vendor"
+                    fullWidth
+                    variant="standard"
+                  />
+                )}
+              />
+              {errors.vendor && (
+                <p style={{ position: "absolute", color: "red" }}>
+                  Vendor is required
+                </p>
+              )}
+            </>
+            <>
+              <Controller
+                name="buyer"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { ref, ...rest } }) => (
+                  <TextField
+                    {...rest}
+                    margin="dense"
+                    id="buyer"
+                    defaultValue={appointementToEdit?.buyer ?? ""}
+                    label="Buyer"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                  />
+                )}
+              />
+              {errors.buyer && (
+                <p style={{ position: "absolute", color: "red" }}>
+                  Buyer is required
+                </p>
+              )}
+            </>
+            <>
+              <Controller
+                name="company"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { ref, ...rest } }) => (
+                  <TextField
+                    {...rest}
+                    margin="dense"
+                    id="company"
+                    defaultValue={appointementToEdit?.company ?? ""}
+                    label="Company"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                  />
+                )}
+              />
+              {errors.company && (
+                <p style={{ position: "absolute", color: "red" }}>
+                  Company is required
+                </p>
+              )}
+            </>
+
+            <Typography
+              gutterBottom
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: "10px",
               }}
-            />
-            <TextField
-              margin="dense"
-              id="buyer"
-              label="Buyer"
-              type="text"
-              fullWidth
-              required
-              defaultValue={appointementToEdit?.buyer ?? ""}
-              variant="standard"
-              onChange={(event) => {
-                setBuyer(event.target.value);
-              }}
-            />
-            <TextField
-              margin="dense"
-              id="company"
-              required
-              label="Company"
-              type="text"
-              fullWidth
-              defaultValue={appointementToEdit?.company ?? ""}
-              variant="standard"
-              onChange={(event) => {
-                setCompany(event.target.value);
-              }}
-            />
-          </Typography>
-          <Typography
-            gutterBottom
-            style={{ display: "flex", justifyContent: "space-between" }}
-          >
-            <FormControl style={{ marginTop: "20px", width: "20%" }}>
-              <InputLabel>Duration</InputLabel>
-              <Select
-                label="Duration"
-                onChange={(event) => setDuration(event.target.value)}
-                defaultValue={appointementToEdit?.duration?.toString() ?? "15"}
-                required
-              >
-                <MenuItem value={15}>15min</MenuItem>
-                <MenuItem value={30}>30min</MenuItem>
-                <MenuItem value={60}>60min</MenuItem>
-                <MenuItem value={120}>120min</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl style={{ marginTop: "20px", width: "50%" }}>
-              <InputLabel>Time</InputLabel>
-              <Select
-                label="Time"
-                required
-                onChange={(event) => setTime(event.target.value)}
+            >
+              <Controller
+                name="duration"
+                control={control}
+                render={({ field: { ref, ...rest } }) => (
+                  <FormControl
+                    style={{ marginTop: "20px", width: "20%" }}
+                    required
+                  >
+                    <InputLabel>Duration</InputLabel>
+                    <Select
+                      {...rest}
+                      label="Duration"
+                      onChange={(event) => setDuration(event.target.value)}
+                      defaultValue={
+                        appointementToEdit?.duration?.toString() ?? "15"
+                      }
+                      style={{ minWidth: "100px" }}
+                      required
+                    >
+                      <MenuItem value={15}>15min</MenuItem>
+                      <MenuItem value={30}>30min</MenuItem>
+                      <MenuItem value={60}>60min</MenuItem>
+                      <MenuItem value={120}>120min</MenuItem>
+                    </Select>
+                  </FormControl>
+                )}
+              />
+              <Controller
+                name="time"
+                control={control}
                 defaultValue={appointementToEdit?.time ?? "09:00"}
-              >
-                {TimeSlots.map((timeslot) => (
-                  <MenuItem value={timeslot} key={timeslot}>
-                    {timeslot}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleSubmit} type="submit">
-            {modalId ? "Save Changes" : "Create"}
-          </Button>
-        </DialogActions>
+                render={({ field: { ref, ...rest } }) => (
+                  <FormControl style={{ marginTop: "20px", width: "50%" }}>
+                    <InputLabel>Time</InputLabel>
+                    <Select
+                      {...rest}
+                      label="Time"
+                      required
+                      onChange={(event) => setTime(event.target.value)}
+                    >
+                      {TimeSlots.map((timeslot) => (
+                        <MenuItem value={timeslot} key={timeslot}>
+                          {timeslot}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                )}
+              />
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus type="submit">
+              {modalId ? "Save Changes" : "Create"}
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </div>
   );
