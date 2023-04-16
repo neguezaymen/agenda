@@ -64,6 +64,9 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
 export default function AddEditAppointementModal() {
   const { isModalVisible, modalId } = useAppSelector((state) => state.uiSlice);
   const appointements = useAppSelector((state) => state.appointements);
+  const appointementsWithAppointementToEdit = appointements.filter(
+    (appointement) => appointement.id === modalId
+  );
   const appointementToEdit = appointements.find((el) => el.id === modalId);
   const { currentDate } = React.useContext(CurrentDateContext);
 
@@ -163,6 +166,7 @@ export default function AddEditAppointementModal() {
                     label="Vendor"
                     type="text"
                     name="vendor"
+                    error={errors.vendor ? true : false}
                     fullWidth
                     variant="outlined"
                     color="primary"
@@ -187,6 +191,7 @@ export default function AddEditAppointementModal() {
                     id="buyer"
                     defaultValue={appointementToEdit?.buyer ?? ""}
                     label="Buyer"
+                    error={errors.buyer ? true : false}
                     type="text"
                     fullWidth
                     variant="outlined"
@@ -212,6 +217,7 @@ export default function AddEditAppointementModal() {
                     id="company"
                     defaultValue={appointementToEdit?.company ?? ""}
                     label="Company"
+                    error={errors.company ? true : false}
                     type="text"
                     fullWidth
                     variant="outlined"
@@ -254,9 +260,12 @@ export default function AddEditAppointementModal() {
                       variant="outlined"
                       color="primary"
                     >
-                      {getDisponibilites(appointements)?.durations[
-                        watch("time")
-                      ]?.map((el) => (
+                      {getDisponibilites(
+                        currentDate,
+                        modalId
+                          ? appointementsWithAppointementToEdit
+                          : appointements
+                      )?.durations[watch("time")]?.map((el) => (
                         <MenuItem value={el}>{el}</MenuItem>
                       ))}
                     </Select>
@@ -271,7 +280,12 @@ export default function AddEditAppointementModal() {
                   <FormControl style={{ marginTop: "20px", width: "50%" }}>
                     <InputLabel>Time</InputLabel>
                     <Select {...rest} label="Time" required>
-                      {getDisponibilites(appointements).hours.map((el) => (
+                      {getDisponibilites(
+                        currentDate,
+                        modalId
+                          ? appointementsWithAppointementToEdit
+                          : appointements
+                      ).hours.map((el) => (
                         <MenuItem value={el}>{el}</MenuItem>
                       ))}
                     </Select>

@@ -3,7 +3,7 @@ interface RendezVous {
   duration: number;
 }
 
-export function getDisponibilites(rdv: RendezVous[]): {durations: {[hour: string]: number[]}, hours: string[]} {
+export function getDisponibilites(date: Date, rdv: RendezVous[]): {durations: {[hour: string]: number[]}, hours: string[]} {
   // Create an array with all available hours from 9am to 6pm for the given date
   const availableHours = Array.from({length: 36}, (_, i) => {
     const hour = Math.floor(i/4) + 9;
@@ -16,8 +16,9 @@ export function getDisponibilites(rdv: RendezVous[]): {durations: {[hour: string
     return endHour <= 18;
   });
 
-  // Filter out the already reserved hours
-  rdv.forEach(r => {
+  // Filter out the already reserved hours for the given date
+  const filteredRdv = rdv.filter(r => r.date.toDateString() === date.toDateString());
+  filteredRdv.forEach(r => {
     const startHour = r.date.getHours();
     const startMinute = r.date.getMinutes();
     const startIndex = (startHour - 9) * 4 + startMinute / 15;
@@ -34,7 +35,7 @@ export function getDisponibilites(rdv: RendezVous[]): {durations: {[hour: string
       const startIndex = (startHour - 9) * 4 + startMinute / 15;
       const endIndex = startIndex + d / 15;
       const endIndexMax = availableHours.length;
-      const isHourAvailable = rdv.every(r => {
+      const isHourAvailable = filteredRdv.every(r => {
         const hour = r.date.getHours();
         const minute = r.date.getMinutes();
         const startRdvIndex = (hour - 9) * 4 + minute / 15;

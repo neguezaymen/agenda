@@ -27,6 +27,9 @@ const Navbar = () => {
               input: { display: "none" },
               fieldset: { display: "none" },
               marginTop: "10px",
+              svg: {
+                color: "#1876D1",
+              },
             }}
           />
         </LocalizationProvider>

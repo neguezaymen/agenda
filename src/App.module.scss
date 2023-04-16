@@ -7,6 +7,8 @@
 .container {
    @include sm {
       padding: 0;
+      margin: 0;
+      border-radius: inherit;
     }
    display: flex;
    justify-content: center;
@@ -18,6 +20,6 @@
    margin: 10vh auto;
    border-radius: 20px;
    min-height: 100vh;
-   background-color: #ECF5FA;
+   background-color: #EE8674;
    font-family: 'Roboto';
 }
