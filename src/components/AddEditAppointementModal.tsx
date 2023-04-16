@@ -16,7 +16,6 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { TimeSlots } from "../utils/TimeSlots";
 import {
   GetAppointementDate,
   GetHoursAndMinutesFromTime,
