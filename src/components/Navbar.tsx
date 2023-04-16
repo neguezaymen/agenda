@@ -2,10 +2,10 @@ import React, { useContext } from "react";
 import styles from "./NavBar.module.scss";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 
 import { CurrentDateContext } from "../contexts/CurrentDateContext";
+import { DesktopDatePicker } from "@mui/x-date-pickers";
 
 const Navbar = () => {
   const { currentDate, setCurrentDate } = useContext(CurrentDateContext);
@@ -20,7 +20,7 @@ const Navbar = () => {
       </div>
       <div className={styles.datePicker}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
+          <DesktopDatePicker
             value={dayjs(currentDate)}
             onChange={(value) => value && setCurrentDate(value.toDate())}
             sx={{
