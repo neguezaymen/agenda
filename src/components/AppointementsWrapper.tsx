@@ -9,6 +9,7 @@ import { isSameDay } from "date-fns";
 import { setModalId, showDeleteModal, showModal } from "../slices/UiSlice";
 import CurrentTimeBar from "./CurrentTimeBar";
 
+
 export const OneMinuteToPixels = 4;
 export const AppointementsWrapper = () => {
   return (
@@ -39,7 +40,6 @@ const Line = ({ slot, index }: { slot: string; index: number }) => {
 const Appointements = () => {
   const { currentDate } = useContext(CurrentDateContext);
   const reservations = useAppSelector((state) => state.appointements);
-
   const todayReservations = reservations.filter((reservation) => {
     return isSameDay(new Date(currentDate), new Date(reservation.date));
   });

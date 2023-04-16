@@ -25,6 +25,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { addAppointement, editAppointement } from "../slices/appointementSlice";
 import { CurrentDateContext } from "../contexts/CurrentDateContext";
 import { hideModal, setModalId } from "../slices/UiSlice";
+import { getDisponibilites } from "../utils/getDisponibilites";
 
 export interface DialogTitleProps {
   children?: React.ReactNode;
@@ -66,6 +67,7 @@ export default function AddEditAppointementModal() {
   const appointements = useAppSelector((state) => state.appointements);
   const appointementToEdit = appointements.find((el) => el.id === modalId);
   const { currentDate } = React.useContext(CurrentDateContext);
+
   const {
     handleSubmit,
     control,
@@ -253,10 +255,11 @@ export default function AddEditAppointementModal() {
                       variant="outlined"
                       color="primary"
                     >
-                      <MenuItem value={15}>15min</MenuItem>
-                      <MenuItem value={30}>30min</MenuItem>
-                      <MenuItem value={60}>60min</MenuItem>
-                      <MenuItem value={120}>120min</MenuItem>
+                      {getDisponibilites(appointements)?.durations[
+                        watch("time")
+                      ]?.map((el) => (
+                        <MenuItem value={el}>{el}</MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                 )}
@@ -269,10 +272,8 @@ export default function AddEditAppointementModal() {
                   <FormControl style={{ marginTop: "20px", width: "50%" }}>
                     <InputLabel>Time</InputLabel>
                     <Select {...rest} label="Time" required>
-                      {TimeSlots.map((timeslot) => (
-                        <MenuItem value={timeslot} key={timeslot}>
-                          {timeslot}
-                        </MenuItem>
+                      {getDisponibilites(appointements).hours.map((el) => (
+                        <MenuItem value={el}>{el}</MenuItem>
                       ))}
                     </Select>
                   </FormControl>
