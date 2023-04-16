@@ -6,7 +6,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import Typography from "@mui/material/Typography";
 import styles from "./MainSection.module.scss";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import {
@@ -146,6 +145,8 @@ export default function AddEditAppointementModal() {
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={isModalVisible}
+        fullWidth
+        maxWidth="sm"
       >
         <BootstrapDialogTitle onClose={handleClose}>
           {modalId ? "Edit the appointment" : "Create an appointment"}
@@ -174,9 +175,7 @@ export default function AddEditAppointementModal() {
                 )}
               />
               {errors.vendor && (
-                <p style={{ position: "absolute", color: "red" }}>
-                  Vendor is required
-                </p>
+                <p style={{ color: "red" }}>Vendor is required</p>
               )}
             </>
             <>
@@ -200,9 +199,7 @@ export default function AddEditAppointementModal() {
                 )}
               />
               {errors.buyer && (
-                <p style={{ position: "absolute", color: "red" }}>
-                  Buyer is required
-                </p>
+                <p style={{ color: "red" }}>Buyer is required</p>
               )}
             </>
             <>
@@ -226,26 +223,20 @@ export default function AddEditAppointementModal() {
                 )}
               />
               {errors.company && (
-                <p style={{ position: "absolute", color: "red" }}>
-                  Company is required
-                </p>
+                <p style={{ color: "red" }}>Company is required</p>
               )}
             </>
-
-            <Typography
-              gutterBottom
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginTop: "10px",
-              }}
-            >
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <Controller
                 name="duration"
                 control={control}
                 render={({ field: { ref, ...rest } }) => (
                   <FormControl
-                    style={{ marginTop: "20px", width: "20%" }}
+                    style={{
+                      marginTop: "20px",
+                      width: "50%",
+                      marginRight: "10px",
+                    }}
                     required
                   >
                     <InputLabel>Duration</InputLabel>
@@ -255,7 +246,6 @@ export default function AddEditAppointementModal() {
                       defaultValue={
                         appointementToEdit?.duration?.toString() ?? "15"
                       }
-                      style={{ minWidth: "100px" }}
                       required
                       variant="outlined"
                       color="primary"
@@ -266,7 +256,9 @@ export default function AddEditAppointementModal() {
                           ? appointementsWithAppointementToEdit
                           : appointements
                       )?.durations[watch("time")]?.map((el) => (
-                        <MenuItem value={el}>{el}</MenuItem>
+                        <MenuItem value={el} key={el}>
+                          {el}
+                        </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
@@ -277,7 +269,13 @@ export default function AddEditAppointementModal() {
                 control={control}
                 defaultValue={appointementToEdit?.time ?? "09:00"}
                 render={({ field: { ref, ...rest } }) => (
-                  <FormControl style={{ marginTop: "20px", width: "50%" }}>
+                  <FormControl
+                    style={{
+                      marginTop: "20px",
+                      width: "50%",
+                      marginLeft: "10px",
+                    }}
+                  >
                     <InputLabel>Time</InputLabel>
                     <Select {...rest} label="Time" required>
                       {getDisponibilites(
@@ -286,13 +284,15 @@ export default function AddEditAppointementModal() {
                           ? appointementsWithAppointementToEdit
                           : appointements
                       ).hours.map((el) => (
-                        <MenuItem value={el}>{el}</MenuItem>
+                        <MenuItem value={el} key={el}>
+                          {el}
+                        </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
                 )}
               />
-            </Typography>
+            </div>
           </DialogContent>
           <DialogActions>
             <Button autoFocus type="submit" variant="outlined" color="success">
