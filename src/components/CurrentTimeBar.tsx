@@ -5,7 +5,7 @@ const CurrentTimeBar = () => {
   const date = new Date();
   const position =
     (date.getHours() - 9) * 240 + date.getMinutes() * OneMinuteToPixels;
-  return date.getHours() >= 9 && date.getHours() <= 18 ? (
+  return date.getHours() >= 9 && date.getHours() < 18 ? (
     <div
       style={{
         display: "flex",
