@@ -64,7 +64,7 @@ export default function AddEditAppointementModal() {
   const { isModalVisible, modalId } = useAppSelector((state) => state.uiSlice);
   const appointements = useAppSelector((state) => state.appointements);
   const appointementsWithAppointementToEdit = appointements.filter(
-    (appointement) => appointement.id === modalId
+    (appointement) => appointement.id !== modalId
   );
   const appointementToEdit = appointements.find((el) => el.id === modalId);
   const { currentDate } = React.useContext(CurrentDateContext);
